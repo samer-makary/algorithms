@@ -130,17 +130,16 @@ public class QuickSort {
 	}
 
 	private static int getMedianOfThreeIdx(int[] list, int fromIdx, int toIdx) {
-		int length = toIdx - fromIdx + 1;
-		int middleIdx = (length / 2) + fromIdx;
+		int middleIdx = (fromIdx + toIdx) >> 1;
 		int[] three = new int[] { list[fromIdx], list[middleIdx], list[toIdx] };
 		Arrays.sort(three);
 		
 		if (three[1] == list[fromIdx])
 			return fromIdx;
-		if (three[1] == list[middleIdx])
-			return middleIdx;
+		if (three[1] == list[toIdx])
+			return toIdx;
 		
-		return toIdx;
+		return middleIdx;
 	}
 
 	// The following part is to read and process the input file
