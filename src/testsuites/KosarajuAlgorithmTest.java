@@ -46,7 +46,7 @@ public class KosarajuAlgorithmTest {
 	}
 
 	@Test
-	public void testLecDAG() {
+	public void testLecDG() {
 		int N = 5;
 		int n = 9;
 		String filePath = "./data/SCC/lec-dg.txt";

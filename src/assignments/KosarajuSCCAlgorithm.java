@@ -21,14 +21,16 @@ import java.util.Stack;
 
 /**
  * This algorithm has a bug in it has I haven't found yet.
+ * [FIXED] The bug was in the computation of the finishing time. :)
  * @author samer
  *
  */
 public class KosarajuSCCAlgorithm {
 	
+	private static final boolean _RUN_REC_DFS = false;
+	
 	private static final int _NOT_VISITED = -2;
-	private static final int _FIRST_VISIT = -1;
-	private static final int _SECOND_VISIT = 0;
+	private static final int _VISITED = 0;
 	
 	private GraphDirected dg;
 	private Map<Integer, Integer> vertexFinishingTime;
@@ -57,7 +59,16 @@ public class KosarajuSCCAlgorithm {
 	public Map<Integer, Set<Integer>> extractSCCWithLeaders() {
 		System.out
 				.println("Computing the vertices finishing time in the reverse DAG");
-		computeRevDGVerticesFinishingTime();
+		if (!_RUN_REC_DFS)
+			computeRevDGVerticesFinishingTime();
+		else {
+			GraphDirected dgRev = dg.getReversed();
+
+			for (Integer vid : dgRev.getVerticesIDs()) {
+				if (vertexFinishingTime.get(vid) < 0)
+					recursiveDFS(dgRev, vid);
+			}
+		}
 		
 		System.out
 				.println("Sorting the vertices finishing times in descending order");
@@ -88,33 +99,44 @@ public class KosarajuSCCAlgorithm {
 		GraphDirected revDG = dg.getReversed();
 		int ft = 0;
 		List<Integer> verticesIDs = revDG.getVerticesIDs();
-//		Collections.sort(verticesIDs);
-//		Collections.reverse(verticesIDs);
 		for (Integer vid : verticesIDs) {
 			if (vertexFinishingTime.get(vid) == _NOT_VISITED) {
 				
 				// invoke DSF starting from current vertex
 				Stack<Integer> stack = new Stack<Integer>();
 				stack.push(vid);
-				vertexFinishingTime.put(vid, _FIRST_VISIT);
 				while (!stack.isEmpty()) {
-					Integer currVID = stack.peek();
-					if (vertexFinishingTime.get(currVID) == _FIRST_VISIT) {
-						vertexFinishingTime.put(currVID, _SECOND_VISIT);
+					Integer currVID = stack.pop();
+					if (vertexFinishingTime.get(currVID) == _NOT_VISITED) {
+						vertexFinishingTime.put(currVID, _VISITED);
+						stack.push(currVID);
 						Vertex currV = revDG.getVertexByID(currVID);
 						for (Integer currVAdjID : currV.getDistinctAdjVertices()) {
 							if (vertexFinishingTime.get(currVAdjID) == _NOT_VISITED) {
 								stack.push(currVAdjID);
-								vertexFinishingTime.put(currVAdjID, _FIRST_VISIT);
 							}
 						}
-					} else if (vertexFinishingTime.get(currVID) == _SECOND_VISIT) {
+					} else if (vertexFinishingTime.get(currVID) == _VISITED) {
 						vertexFinishingTime.put(currVID, ++ft);
-						stack.pop();
 					}
 				}								
 			}
 		}		
+	}
+	
+	private static int t = 1;
+	private void recursiveDFS(GraphDirected dg, int vid) {
+		vertexFinishingTime.put(vid, _VISITED);
+		List<Integer> adj = new ArrayList<Integer>(dg.getVertexByID(vid)
+				.getDistinctAdjVertices());
+		Collections.sort(adj);
+		for (Integer uid : adj) {
+			if (vertexFinishingTime.get(uid) == _NOT_VISITED) {
+				recursiveDFS(dg, uid);
+			}
+		}
+		
+		vertexFinishingTime.put(vid, t++);
 	}
 	
 	private void extractSCCFromOriginalDG() {
@@ -136,22 +158,20 @@ public class KosarajuSCCAlgorithm {
 				// invoke DSF starting from current vertex
 				Stack<Integer> stack = new Stack<Integer>();
 				stack.push(vid);
-				vertexLeader.put(vid, _FIRST_VISIT);
 				while (!stack.isEmpty()) {
-					Integer currVID = stack.peek();
-					if (vertexLeader.get(currVID) == _FIRST_VISIT) {
-						vertexLeader.put(currVID, _SECOND_VISIT);
+					Integer currVID = stack.pop();
+					if (vertexLeader.get(currVID) == _NOT_VISITED) {
+						vertexLeader.put(currVID, _VISITED);
+						stack.push(currVID);
 						Vertex currV = dg.getVertexByID(currVID);
 						for (Integer currVAdjID : currV
 								.getDistinctAdjVertices()) {
 							if (vertexLeader.get(currVAdjID) == _NOT_VISITED) {
 								stack.push(currVAdjID);
-								vertexLeader.put(currVAdjID, _FIRST_VISIT);
 							}
 						}
-					} else if (vertexLeader.get(currVID) == _SECOND_VISIT) {
+					} else if (vertexLeader.get(currVID) == _VISITED) {
 						vertexLeader.put(currVID, vid);
-						stack.pop();
 					}
 				}
 			}
@@ -159,8 +179,8 @@ public class KosarajuSCCAlgorithm {
 	}
 	
 	public static void main(String[] args) {
-		int N = 5;
-		int n = 4;
+		int N = 20;
+		int n = 13;
 		String filePath = "./data/SCC/main-input.txt";
 		System.out.println("Reading graph from file");
 		GraphDirected g = readGraphFromFile(filePath, n);
@@ -171,6 +191,7 @@ public class KosarajuSCCAlgorithm {
 		ArrayList<Integer> sccsSizes = new ArrayList<Integer>(sccs.size());
 		for (Entry<Integer, Set<Integer>> e : sccs.entrySet()) {
 			sccsSizes.add(e.getValue().size());
+			System.out.println(e.getValue());
 		}
 		Collections.sort(sccsSizes);
 		Collections.reverse(sccsSizes);
@@ -185,16 +206,6 @@ public class KosarajuSCCAlgorithm {
 		
 		System.out.println(ft);
 		System.out.println(ls);
-		
-//		int node = 8543;
-//		System.out.println("FT of node: " + node + " = " + ft.get(node));
-//		System.out.println("L of node: " + node + " = " + ls.get(node));
-//		FT of node: 8543 = 623067
-//		L of node: 8543 = 726608
-		
-//		FT of node: 8543 = 874865
-//		L of node: 8543 = 8540
-//		434821,968,459,313,211,205,197,180,178,177
 	}
 	
 	public static GraphDirected readGraphFromFile(String filePath, int numOfVertices) {
