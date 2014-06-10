@@ -4,7 +4,7 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-import assignments.CountingInversions;
+import coursera.algo005.assignments.CountingInversions;
 
 public class CountingInversionsTest {
 

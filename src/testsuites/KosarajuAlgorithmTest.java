@@ -11,7 +11,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
-import assignments.KosarajuSCCAlgorithm;
+import coursera.algo005.assignments.KosarajuSCCAlgorithm;
 
 public class KosarajuAlgorithmTest {
 

@@ -1,4 +1,4 @@
-package assignments;
+package coursera.algo005.assignments;
 
 import graph.Edge;
 import graph.GraphUndirected;

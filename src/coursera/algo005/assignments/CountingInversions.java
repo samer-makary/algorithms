@@ -1,4 +1,4 @@
-package assignments;
+package coursera.algo005.assignments;
 
 import java.io.BufferedInputStream;
 import java.io.File;
