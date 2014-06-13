@@ -20,11 +20,11 @@ public class GraphDirected {
 	public int getNumOfVertices() {
 		return this.vertices.size();
 	}
-	
+
 	public List<Integer> getVerticesIDs() {
 		return new ArrayList<Integer>(vertices.keySet());
 	}
-	
+
 	public Vertex getVertexByID(int id) {
 		return vertices.get(id);
 	}
@@ -39,7 +39,7 @@ public class GraphDirected {
 	}
 
 	public void addConnection(int fromVertex, int toVertex) {
-		
+
 		Vertex uVert;
 		if (vertices.containsKey(fromVertex)) {
 			uVert = vertices.get(fromVertex);
@@ -48,24 +48,41 @@ public class GraphDirected {
 			vertices.put(fromVertex, uVert);
 		}
 		uVert.addEdge(new Edge(fromVertex, toVertex, true));
-		
+
 		if (!vertices.containsKey(toVertex)) {
 			vertices.put(toVertex, new Vertex(toVertex));
 		}
 	}
-	
+
+	public void addConnection(int fromVertex, int toVertex, double weight) {
+
+		Vertex uVert;
+		if (vertices.containsKey(fromVertex)) {
+			uVert = vertices.get(fromVertex);
+		} else {
+			uVert = new Vertex(fromVertex);
+			vertices.put(fromVertex, uVert);
+		}
+		uVert.addEdge(new WeightedEdge(fromVertex, toVertex, weight, true));
+
+		if (!vertices.containsKey(toVertex)) {
+			vertices.put(toVertex, new Vertex(toVertex));
+		}
+	}
+
 	public GraphDirected getReversed() {
 		GraphDirected gRev = new GraphDirected(getNumOfVertices());
 		for (Entry<Integer, Vertex> e : vertices.entrySet()) {
 			Vertex u = e.getValue();
-			for  (Edge edg : u.getAllAdjEdges()) {
-				gRev.addConnection(edg.getOtherVertex(u.getVertexID()), u.getVertexID());
+			for (Edge edg : u.getAllAdjEdges()) {
+				gRev.addConnection(edg.getOtherVertex(u.getVertexID()),
+						u.getVertexID());
 			}
 		}
-		
+
 		return gRev;
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -75,7 +92,7 @@ public class GraphDirected {
 			sb.append(v);
 			sb.append("\n");
 		}
-		
+
 		return sb.toString();
 	}
 

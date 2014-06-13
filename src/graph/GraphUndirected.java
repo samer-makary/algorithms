@@ -20,8 +20,16 @@ public class GraphUndirected {
 		this.rand = new Random(System.currentTimeMillis() << 32);
 	}
 	
+	public List<Integer> getVerticesIDs() {
+		return new ArrayList<Integer>(vertices.keySet());
+	}
+	
 	public int getNumOfVertices() {
 		return this.vertices.size();
+	}
+	
+	public Vertex getVertexByID(int id) {
+		return vertices.get(id);
 	}
 	
 	public int getNumOfEdges() {
@@ -54,6 +62,19 @@ public class GraphUndirected {
 //		}
 //		vVert.addEdge(new Edge(v, u));
 			
+	}
+	
+	public void addConnection(int u, int v, double w) {
+		maxVertexID = Math.max(maxVertexID, Math.max(u, v));
+		
+		Vertex uVert;
+		if (vertices.containsKey(u)) {
+			uVert = vertices.get(u);
+		} else {
+			uVert = new Vertex(u);
+			vertices.put(u, uVert);
+		}
+		uVert.addEdge(new WeightedEdge(u, v, w));
 	}
 	
 	public Edge getRandomEdge() {
