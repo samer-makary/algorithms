@@ -9,8 +9,9 @@ import java.util.Map;
 
 import org.junit.Test;
 
-import assignments.DijkstraShortestPathAlgorithm;
-import assignments.DijkstraShortestPathAlgorithm.DijkstraVertex;
+import coursera.algo005.assignments.DijkstraShortestPathAlgorithm;
+import coursera.algo005.assignments.DijkstraShortestPathAlgorithm.DijkstraVertex;
+
 
 public class DijkstraSPAlgorithmTest {
 
