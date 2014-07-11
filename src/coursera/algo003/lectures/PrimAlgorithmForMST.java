@@ -6,6 +6,7 @@ import graph.Vertex;
 import graph.WeightedEdge;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -26,9 +27,10 @@ import utils.heap.MinHeap;
  */
 public class PrimAlgorithmForMST {
 
-	public static int heapType;
-	public static final int _HEAP_WITH_O_N_UPDATE = 0;
-	public static final int _HEAP_WITH_O_LOGN_UPDATE = 1;
+	public static final int _NAIVE = 0;
+	public static final int _HEAP_WITH_O_N_UPDATE = 1;
+	public static final int _HEAP_WITH_O_LOGN_UPDATE = 2;
+	public static int heapType = _HEAP_WITH_O_LOGN_UPDATE;
 
 	private GraphUndirected udg;
 
@@ -46,6 +48,10 @@ public class PrimAlgorithmForMST {
 		// create MST for every SCC
 		for (Set<Integer> scc : graphSCCs) {
 			switch (heapType) {
+			case _NAIVE:
+				useNaive(msts, scc);
+				break;
+
 			case _HEAP_WITH_O_N_UPDATE:
 				useO_N_Heap(msts, scc);
 				break;
@@ -59,6 +65,31 @@ public class PrimAlgorithmForMST {
 		return msts;
 	}
 
+	private void useNaive(MSTUndirected msts, Set<Integer> scc) {
+		Set<Integer> spanned = new HashSet<Integer>(scc.size());
+		spanned.add(scc.iterator().next());
+		while (spanned.size() < scc.size()) {
+			double minCutEdgeWeight = Double.MAX_VALUE;
+			Edge minCutEdge = null;
+			for (Integer v : spanned) {
+				List<Edge> edges = udg.getVertexByID(v).getAllAdjEdges();
+				for (Edge e : edges) {
+					WeightedEdge we = (WeightedEdge) e;
+					if (!spanned.contains(we.getOtherVertex(v))) {
+						if (Double.compare(we.weight, minCutEdgeWeight) < 0) {
+							minCutEdgeWeight = we.weight;
+							minCutEdge = we;
+						}
+					}
+				}
+			}
+			// only one of the following is new to the set
+			spanned.add(minCutEdge.uID);
+			spanned.add(minCutEdge.vID);
+			msts.addConnection(minCutEdge.uID, minCutEdge.vID, minCutEdgeWeight);
+		}
+	}
+
 	private void useO_N_Heap(MSTUndirected msts, Set<Integer> scc) {
 		Map<Integer, Double> vIDToKey = new HashMap<Integer, Double>(scc.size());
 		Queue<PrimAlgorithmVertex> minHeap = new PriorityQueue<PrimAlgorithmVertex>(
@@ -69,11 +100,15 @@ public class PrimAlgorithmForMST {
 			PrimAlgorithmVertex pav = new PrimAlgorithmVertex();
 			pav.vertexID = vID;
 			minHeap.add(pav);
+			vIDToKey.put(vID, Double.MAX_VALUE);
 		}
 
 		while (!minHeap.isEmpty()) {
 			PrimAlgorithmVertex currPrimVertex = minHeap.poll();
 			Vertex currVertex = udg.getVertexByID(currPrimVertex.vertexID);
+
+			// vertex is now spanned, remove it from unvisited map
+			vIDToKey.remove(currPrimVertex.vertexID);
 
 			// only case in which the following check will fail
 			// is for the very first vertex only.
@@ -91,14 +126,18 @@ public class PrimAlgorithmForMST {
 				// if other vertex hasn't been visited before
 				// or it's been visited but with higher edge-cost,
 				// then remove it from Heap and insert it with new cost.
-				if (!vIDToKey.containsKey(otherVert)
-						|| vIDToKey.get(otherVert) > we.weight) {
-					vIDToKey.put(otherVert, we.weight);
-					PrimAlgorithmVertex pav = new PrimAlgorithmVertex();
-					pav.vertexID = e.getOtherVertex(currVertex.getVertexID());
-					minHeap.remove(pav);
-					pav.vertexEdge = we;
-					minHeap.add(pav);
+				if (vIDToKey.containsKey(otherVert)) {
+					if (vIDToKey.get(otherVert) > we.weight) {
+						vIDToKey.put(otherVert, we.weight);
+						PrimAlgorithmVertex pav = new PrimAlgorithmVertex();
+						pav.vertexID = e.getOtherVertex(currVertex
+								.getVertexID());
+						if (!minHeap.remove(pav))
+							throw new IllegalStateException("A7A"
+									+ minHeap.contains(pav));
+						pav.vertexEdge = we;
+						minHeap.add(pav);
+					}
 				}
 			}
 		}
@@ -177,10 +216,8 @@ public class PrimAlgorithmForMST {
 				return false;
 			else {
 				PrimAlgorithmVertex o = (PrimAlgorithmVertex) other;
-				if (this.vertexID != o.vertexID)
-					return false;
+				return this.vertexID == o.vertexID;
 			}
-			return true;
 		}
 
 		@Override

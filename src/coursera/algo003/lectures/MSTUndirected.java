@@ -15,6 +15,7 @@ public class MSTUndirected extends GraphUndirected {
 		super();
 	}
 
+	// check is NOT complete
 	public boolean isSpanningTreeOfG(GraphUndirected G) {
 		Set<Set<Integer>> treeSCCs = new HashSet<Set<Integer>>(
 				this.getConnectedComponents());

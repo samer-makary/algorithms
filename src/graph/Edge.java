@@ -57,7 +57,9 @@ public class Edge {
 			return true;
 		
 		Edge other = (Edge) o;
-		return this.hashCode() == other.hashCode();
+		return Math.min(this.uID, this.vID) == Math.min(other.uID, other.vID)
+				&& Math.max(this.uID, this.vID) == Math.max(other.uID,
+						other.vID);
 	}
 	
 	@Override

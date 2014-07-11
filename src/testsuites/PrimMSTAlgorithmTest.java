@@ -72,6 +72,16 @@ public class PrimMSTAlgorithmTest {
 	}
 
 	@Test
+	public void testCaseEdges_N() {
+		String filePath = "./data/MST/edges.txt";
+		GraphUndirected g = readGraph(filePath);
+		PrimAlgorithmForMST.heapType = PrimAlgorithmForMST._HEAP_WITH_O_N_UPDATE;
+		PrimAlgorithmForMST prim = new PrimAlgorithmForMST(g);
+		MSTUndirected mst = prim.getMST();
+		assertEquals(-3612829.0, mst.getTreeWeight(), EPSILON);
+	}
+
+	@Test
 	public void testCase1_LogN() {
 		String filePath = "./data/MST/test-case-1.txt";
 		GraphUndirected g = readGraph(filePath);
@@ -99,6 +109,56 @@ public class PrimMSTAlgorithmTest {
 		PrimAlgorithmForMST prim = new PrimAlgorithmForMST(g);
 		MSTUndirected mst = prim.getMST();
 		assertEquals(10.46351, mst.getTreeWeight(), EPSILON);
+	}
+	
+	@Test
+	public void testCaseEdges_LogN() {
+		String filePath = "./data/MST/edges.txt";
+		GraphUndirected g = readGraph(filePath);
+		PrimAlgorithmForMST.heapType = PrimAlgorithmForMST._HEAP_WITH_O_LOGN_UPDATE;
+		PrimAlgorithmForMST prim = new PrimAlgorithmForMST(g);
+		MSTUndirected mst = prim.getMST();
+		assertEquals(-3612829.0, mst.getTreeWeight(), EPSILON);
+	}
+	
+	@Test
+	public void testCase1_Naive() {
+		String filePath = "./data/MST/test-case-1.txt";
+		GraphUndirected g = readGraph(filePath);
+		PrimAlgorithmForMST.heapType = PrimAlgorithmForMST._NAIVE;
+		PrimAlgorithmForMST prim = new PrimAlgorithmForMST(g);
+		MSTUndirected mst = prim.getMST();
+		assertEquals(-684, mst.getTreeWeight(), EPSILON);
+	}
+
+	@Test
+	public void testCaseTiny_Naive() {
+		String filePath = "./data/MST/tinyEWG.txt";
+		GraphUndirected g = readGraph(filePath);
+		PrimAlgorithmForMST.heapType = PrimAlgorithmForMST._NAIVE;
+		PrimAlgorithmForMST prim = new PrimAlgorithmForMST(g);
+		MSTUndirected mst = prim.getMST();
+		assertEquals(1.81000, mst.getTreeWeight(), EPSILON);
+	}
+
+	@Test
+	public void testCaseMedium_Naive() {
+		String filePath = "./data/MST/mediumEWG.txt";
+		GraphUndirected g = readGraph(filePath);
+		PrimAlgorithmForMST.heapType = PrimAlgorithmForMST._NAIVE;
+		PrimAlgorithmForMST prim = new PrimAlgorithmForMST(g);
+		MSTUndirected mst = prim.getMST();
+		assertEquals(10.46351, mst.getTreeWeight(), EPSILON);
+	}
+	
+	@Test
+	public void testCaseEdges_Naive() {
+		String filePath = "./data/MST/edges.txt";
+		GraphUndirected g = readGraph(filePath);
+		PrimAlgorithmForMST.heapType = PrimAlgorithmForMST._NAIVE;
+		PrimAlgorithmForMST prim = new PrimAlgorithmForMST(g);
+		MSTUndirected mst = prim.getMST();
+		assertEquals(-3612829.0, mst.getTreeWeight(), EPSILON);
 	}
 
 }

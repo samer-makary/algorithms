@@ -56,15 +56,9 @@ public class GraphUndirected {
 		}
 		uVert.addEdge(new Edge(u, v));
 
-		// Vertex vVert;
-		// if (vertices.containsKey(v)) {
-		// vVert = vertices.get(v);
-		// } else {
-		// vVert = new Vertex(v);
-		// vertices.put(v, vVert);
-		// }
-		// vVert.addEdge(new Edge(v, u));
-
+		// add the v vertex in case it had out-degree of 0
+		if (!vertices.containsKey(v))
+			vertices.put(v, new Vertex(v));
 	}
 
 	public void addConnection(int u, int v, double w) {
@@ -78,6 +72,10 @@ public class GraphUndirected {
 			vertices.put(u, uVert);
 		}
 		uVert.addEdge(new WeightedEdge(u, v, w));
+
+		// add the v vertex in case it had out-degree of 0
+		if (!vertices.containsKey(v))
+			vertices.put(v, new Vertex(v));
 	}
 
 	public Edge getRandomEdge() {
