@@ -59,6 +59,7 @@ public class DijkstraShortestPathAlgorithm {
 					dv.vID = we.getOtherVertex(dv.pathPredecessor);
 					dv.pathCost = we.weight + res.get(dv.pathPredecessor).pathCost;
 					
+					// with the following lines the algorithm is no longer O(m log n)
 					if (dv.pathCost < res.get(dv.vID).pathCost) {
 						// remove the previous cost to vertex vID
 						queue.remove(dv);

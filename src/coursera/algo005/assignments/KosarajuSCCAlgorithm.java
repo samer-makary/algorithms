@@ -20,6 +20,8 @@ import java.util.Set;
 import java.util.Stack;
 
 /**
+ * Algorithm used to find the SCC in a Directed Graph.
+ * 
  * This algorithm has a bug in it has I haven't found yet. 
  * [FIXED] The bug was in the computation of the finishing time. :)
  * 
