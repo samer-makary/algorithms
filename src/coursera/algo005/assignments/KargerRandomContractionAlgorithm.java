@@ -1,13 +1,13 @@
 package coursera.algo005.assignments;
 
-import graph.Edge;
-import graph.GraphUndirected;
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+
+import utils.graph.Edge;
+import utils.graph.GraphUndirected;
 
 public class KargerRandomContractionAlgorithm {
 

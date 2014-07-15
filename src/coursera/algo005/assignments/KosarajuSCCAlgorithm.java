@@ -1,8 +1,5 @@
 package coursera.algo005.assignments;
 
-import graph.GraphDirected;
-import graph.Vertex;
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,6 +15,9 @@ import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.Stack;
+
+import utils.graph.GraphDirected;
+import utils.graph.Vertex;
 
 /**
  * Algorithm used to find the SCC in a Directed Graph.

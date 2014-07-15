@@ -1,10 +1,5 @@
 package coursera.algo003.lectures;
 
-import graph.Edge;
-import graph.GraphUndirected;
-import graph.Vertex;
-import graph.WeightedEdge;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -13,6 +8,10 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Set;
 
+import utils.graph.Edge;
+import utils.graph.GraphUndirected;
+import utils.graph.Vertex;
+import utils.graph.WeightedEdge;
 import utils.heap.Heap;
 import utils.heap.HeapEntry;
 import utils.heap.MinHeap;

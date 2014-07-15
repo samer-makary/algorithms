@@ -1,7 +1,6 @@
 package testsuites;
 
 import static org.junit.Assert.assertEquals;
-import graph.GraphUndirected;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -11,6 +10,7 @@ import java.util.Scanner;
 
 import org.junit.Test;
 
+import utils.graph.GraphUndirected;
 import coursera.algo003.lectures.MSTUndirected;
 import coursera.algo003.lectures.PrimAlgorithmForMST;
 

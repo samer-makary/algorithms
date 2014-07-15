@@ -1,4 +1,4 @@
-package graph;
+package utils.graph;
 
 /**
  * Simple implementation of graph edge. It can work for both directed and

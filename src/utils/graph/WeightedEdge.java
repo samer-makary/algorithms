@@ -1,4 +1,4 @@
-package graph;
+package utils.graph;
 
 public class WeightedEdge extends Edge {
 	

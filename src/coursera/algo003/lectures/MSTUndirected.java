@@ -1,13 +1,13 @@
 package coursera.algo003.lectures;
 
-import graph.Edge;
-import graph.GraphUndirected;
-import graph.Vertex;
-import graph.WeightedEdge;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
+
+import utils.graph.Edge;
+import utils.graph.GraphUndirected;
+import utils.graph.Vertex;
+import utils.graph.WeightedEdge;
 
 public class MSTUndirected extends GraphUndirected {
 

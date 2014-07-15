@@ -2,13 +2,13 @@ package testsuites;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import graph.GraphUndirected;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import org.junit.Test;
 
+import utils.graph.GraphUndirected;
 import coursera.algo005.assignments.DijkstraShortestPathAlgorithm;
 import coursera.algo005.assignments.DijkstraShortestPathAlgorithm.DijkstraVertex;
 

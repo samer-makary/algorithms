@@ -1,10 +1,5 @@
 package coursera.algo005.assignments;
 
-import graph.Edge;
-import graph.GraphUndirected;
-import graph.Vertex;
-import graph.WeightedEdge;
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,6 +9,11 @@ import java.util.Map;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Scanner;
+
+import utils.graph.Edge;
+import utils.graph.GraphUndirected;
+import utils.graph.Vertex;
+import utils.graph.WeightedEdge;
 
 public class DijkstraShortestPathAlgorithm {
 

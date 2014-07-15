@@ -1,7 +1,6 @@
 package testsuites;
 
 import static org.junit.Assert.assertArrayEquals;
-import graph.GraphDirected;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -11,6 +10,7 @@ import java.util.Set;
 
 import org.junit.Test;
 
+import utils.graph.GraphDirected;
 import coursera.algo005.assignments.KosarajuSCCAlgorithm;
 
 public class KosarajuAlgorithmTest {

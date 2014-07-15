@@ -1,13 +1,12 @@
 package coursera.algo003.assignments;
 
-import graph.GraphUndirected;
-
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
 
+import utils.graph.GraphUndirected;
 import coursera.algo003.lectures.MSTUndirected;
 import coursera.algo003.lectures.PrimAlgorithmForMST;
 
