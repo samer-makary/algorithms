@@ -11,7 +11,7 @@ class HeapMain {
 
 	public static void main(String[] args) {
 		int[] in = new int[] { 4, 1, 3, 2, 16, 9, 10, 14, 8, 7 };
-		List<Integer> l = new ArrayList<>();
+		List<Integer> l = new ArrayList<Integer>();
 		for (int i : in)
 			l.add(i);
 
