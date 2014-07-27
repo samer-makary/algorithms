@@ -12,6 +12,18 @@ public class KnapsackItem {
 		this.weight = w;
 	}
 
+	public int getId() {
+		return id;
+	}
+
+	public int getValue() {
+		return value;
+	}
+
+	public int getWeight() {
+		return weight;
+	}
+	
 	@Override
 	public String toString() {
 		return "Item [id=" + id + ", value=" + value + ", weight=" + weight
