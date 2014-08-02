@@ -37,7 +37,18 @@ public class Vertex {
 			throw new IllegalArgumentException(
 					"Cannot add edge to vertex that is equal to neither of its endpoints.");
 	}
-	
+
+	public void updateEdgeWeight(WeightedEdge e, double newWeight) {
+		Integer parallel;
+		if ((parallel = edges.remove(e)) != null) {
+			e.weight = newWeight;
+			edges.put(e, parallel);
+		} else {
+			throw new IllegalArgumentException("Unknown vertex edge "
+					+ e.toString());
+		}
+	}
+
 	public List<Edge> getAllAdjEdges() {
 		List<Edge> allEdges = new ArrayList<Edge>(vertexOutDegree);
 		for (Edge e : edges.keySet()) {
@@ -48,20 +59,20 @@ public class Vertex {
 		}
 		return allEdges;
 	}
-	
+
 	public Set<Edge> getDistinctAdjEdges() {
 		return edges.keySet();
 	}
-	
+
 	public Set<Integer> getDistinctAdjVertices() {
 		Set<Integer> vertices = new HashSet<Integer>(edges.size());
 		for (Edge e : edges.keySet()) {
 			vertices.add(e.getOtherVertex(vertexID));
 		}
-		
+
 		return vertices;
 	}
-	
+
 	@Override
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
@@ -72,11 +83,11 @@ public class Vertex {
 		sb.append("]");
 		return sb.toString();
 	}
-	
+
 	public boolean isAdjacentToVertex(int v) {
 		return getDistinctAdjVertices().contains(v);
 	}
-	
+
 	public void removeEdgeIfExists(Edge e) {
 		if (edges.containsKey(e))
 			edges.remove(e);

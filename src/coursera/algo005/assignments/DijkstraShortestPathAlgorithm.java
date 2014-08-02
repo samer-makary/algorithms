@@ -112,7 +112,7 @@ public class DijkstraShortestPathAlgorithm {
 
 		@Override
 		public int compareTo(DijkstraVertex o) {
-			return Double.compare(pathPredecessor, o.pathPredecessor);
+			return Double.compare(pathCost, o.pathCost);
 		}
 
 		@Override

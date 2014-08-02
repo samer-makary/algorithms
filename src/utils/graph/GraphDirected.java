@@ -75,8 +75,14 @@ public class GraphDirected {
 		for (Entry<Integer, Vertex> e : vertices.entrySet()) {
 			Vertex u = e.getValue();
 			for (Edge edg : u.getAllAdjEdges()) {
-				gRev.addConnection(edg.getOtherVertex(u.getVertexID()),
-						u.getVertexID());
+				if (edg instanceof WeightedEdge) {
+					WeightedEdge wtedg = (WeightedEdge) edg;
+					gRev.addConnection(edg.getOtherVertex(u.getVertexID()),
+							u.getVertexID(), wtedg.weight);
+				} else {
+					gRev.addConnection(edg.getOtherVertex(u.getVertexID()),
+							u.getVertexID());
+				}
 			}
 		}
 
