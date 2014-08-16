@@ -39,15 +39,15 @@ public class KosarajuSCCAlgorithm {
 	private Map<Integer, Integer> vertexFinishingTime;
 	private Map<Integer, Integer> vertexLeader;
 
-	public KosarajuSCCAlgorithm(GraphDirected dag) {
-		this.dg = dag;
+	public KosarajuSCCAlgorithm(GraphDirected dg) {
+		this.dg = dg;
 		vertexFinishingTime = new HashMap<Integer, Integer>(
-				dag.getNumOfVertices());
-		for (Integer vid : dag.getVerticesIDs()) {
+				dg.getNumOfVertices());
+		for (Integer vid : dg.getVerticesIDs()) {
 			vertexFinishingTime.put(vid, _NOT_VISITED);
 		}
-		vertexLeader = new HashMap<Integer, Integer>(dag.getNumOfVertices());
-		for (Integer vid : dag.getVerticesIDs()) {
+		vertexLeader = new HashMap<Integer, Integer>(dg.getNumOfVertices());
+		for (Integer vid : dg.getVerticesIDs()) {
 			vertexLeader.put(vid, _NOT_VISITED);
 		}
 	}
