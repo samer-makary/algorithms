@@ -41,7 +41,7 @@ public class GraphUndirected {
 			counter += v.getAllAdjEdges().size();
 		}
 
-		return counter;
+		return counter / 2;
 	}
 
 	public void addConnection(int u, int v) {

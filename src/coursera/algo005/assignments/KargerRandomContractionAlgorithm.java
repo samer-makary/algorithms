@@ -28,7 +28,7 @@ public class KargerRandomContractionAlgorithm {
 				g.contract(e);
 			}
 			
-			minCut = Math.min(minCut, g.getNumOfEdges() / 2);
+			minCut = Math.min(minCut, g.getNumOfEdges());
 		}
 		return minCut;
 	}

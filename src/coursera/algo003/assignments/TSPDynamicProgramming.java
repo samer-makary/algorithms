@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.BitSet;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -35,26 +36,39 @@ public class TSPDynamicProgramming {
 		// setup initial vertex of the tour
 		int tourFirstVert = vertices.remove(0);
 		toursCost.put(new DPSolu((1 << tourFirstVert), tourFirstVert), 0.0);
+//		BitSet tmp = new BitSet(32);
+//		tmp.set(tourFirstVert);
+//		toursCost.put(new DPSolu(tmp, tourFirstVert), 0.0);
 
 		for (int m = 1; m <= n - 1; m++) {
-			List<Integer> tourSets = chooseR(new HashSet<Integer>(vertices), m);
+			long bef = System.currentTimeMillis();
+			List<BitSet> tourSets = ints2BitSets(chooseR(new HashSet<Integer>(
+					vertices), m));
+			System.out.println("Generated " + tourSets.size()
+					+ " combination in " + (System.currentTimeMillis() - bef));
 			Map<DPSolu, Double> newToursCost = new HashMap<DPSolu, Double>(
 					tourSets.size());
-			for (int SWithOutStart : tourSets) {
-				int S = SWithOutStart | (1 << tourFirstVert);
-				for (int j : listSetBits(SWithOutStart)) {
+			for (BitSet SWithOutStart : tourSets) {
+				BitSet S = (BitSet) SWithOutStart.clone();
+				S.set(tourFirstVert);
+				// for (int j : listSetBits(SWithOutStart)) {
+				for (int j = SWithOutStart.nextSetBit(0); j >= 0; j = SWithOutStart
+						.nextSetBit(j + 1)) {
 
-					DPSolu jSSolu = new DPSolu(S, j);
-					S = clearBit(S, j);
+//					DPSolu jSSolu = new DPSolu(S, j);
+					DPSolu jSSolu = new DPSolu(bitSet2int(S), j);
+					S.clear(j);
 					double min = (toursCost.containsKey(jSSolu) ? toursCost
 							.get(jSSolu) : Double.MAX_VALUE);
 					Set<Edge> jAdjVerts = graph.getVertexByID(j)
 							.getDistinctAdjEdges();
 					for (Edge e : jAdjVerts) {
 						Integer jAdj = e.getOtherVertex(j);
-						if (((S >> jAdj) & 1) == 1) {
+						// if (((S >> jAdj) & 1) == 1) {
+						if (S.get(jAdj)) {
 							WeightedEdge we = (WeightedEdge) e;
-							DPSolu tmpSolu = new DPSolu(S, jAdj);
+//							DPSolu tmpSolu = new DPSolu(S, jAdj);
+							DPSolu tmpSolu = new DPSolu(bitSet2int(S), jAdj);
 							double newCost = (toursCost.containsKey(tmpSolu) ? toursCost
 									.get(tmpSolu) + we.weight
 									: Double.MAX_VALUE);
@@ -64,11 +78,12 @@ public class TSPDynamicProgramming {
 							}
 						}
 					}
-					S |= (1 << j);
+					// S |= (1 << j);
+					S.set(j);
 				}
 			}
 			toursCost = newToursCost;
-			System.out.println("Finished tours of length " + (m + 1));
+			System.out.println("Finished tours of length " + m);
 		}
 
 		Map<Integer, Double> weightJToStart = new HashMap<Integer, Double>();
@@ -83,8 +98,10 @@ public class TSPDynamicProgramming {
 		}
 
 		double minTourCost = Double.MAX_VALUE;
-		int allVerts= setBitByVerticesIDs(0, vertices);
+		int allVerts = setBitByVerticesIDs(0, vertices);
 		allVerts |= (1 << tourFirstVert);
+//		BitSet allVerts = new BitSet();
+//		allVerts.set(0, vertices.size());
 		for (int vid : vertices) {
 			DPSolu tmpSolu = new DPSolu(allVerts, vid);
 			double newCost = ((toursCost.containsKey(tmpSolu) && weightJToStart
@@ -97,8 +114,30 @@ public class TSPDynamicProgramming {
 		return minTourCost;
 	}
 
+	private List<BitSet> ints2BitSets(List<Integer> chooseR) {
+		List<BitSet> bitsets = new ArrayList<BitSet>(chooseR.size());
+		for (int c : chooseR) {
+			BitSet bs = new BitSet(32);
+			for (int i = 0; c > 0; c >>>= 1, i++) {
+				if ((c & 0x1) == 1)
+					bs.set(i);
+			}
+			bitsets.add(bs);
+		}
+
+		return bitsets;
+	}
+
+	private int bitSet2int(BitSet bs) {
+		int val = 0;
+		for (int i = bs.nextSetBit(0); i >= 0; i = bs.nextSetBit(i + 1)) {
+			val |= (1 << i);
+		}
+		return val;
+	}
+
 	private int clearBit(int s, int bitIdx) {
-		if (((s >> bitIdx) & 1) == 1)
+		if (((s >>> bitIdx) & 0x1) == 1)
 			s ^= (1 << bitIdx);
 		return s;
 	}
@@ -107,7 +146,7 @@ public class TSPDynamicProgramming {
 		int verts = intBits;
 		List<Integer> setBits = new ArrayList<Integer>(32);
 		for (int i = 0; verts > 0; verts >>>= 1, i++) {
-			if ((verts & 1) == 1)
+			if ((verts & 0x1) == 1)
 				setBits.add(i);
 		}
 		return setBits;
@@ -128,8 +167,8 @@ public class TSPDynamicProgramming {
 			for (Integer i : new HashSet<Integer>(list)) {
 				list.remove(i);
 				if (r > 1) {
-					List<Integer> iChoices = chooseR(new HashSet<Integer>(list),
-							r - 1);
+					List<Integer> iChoices = chooseR(
+							new HashSet<Integer>(list), r - 1);
 					for (Integer iChoice : iChoices) {
 						iChoice |= (1 << i);
 						choices.add(iChoice);
